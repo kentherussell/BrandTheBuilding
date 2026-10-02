@@ -1,0 +1,289 @@
+.menuButton {
+  // The game's floating Button owns size, padding, color and tooltip layout.
+  flex: 0 0 auto;
+}
+
+.icon {
+  align-items: center;
+  display: flex;
+  height: 24rem;
+  justify-content: center;
+  width: 24rem;
+}
+
+.icon svg {
+  fill: none;
+  height: 22rem;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.9;
+  width: 22rem;
+}
+
+.targetingPanel,
+.panel {
+  background: linear-gradient(155deg, rgba(31, 42, 53, 0.99), rgba(14, 21, 28, 0.99));
+  border: 1rem solid rgba(157, 210, 233, 0.32);
+  border-radius: 10rem;
+  box-shadow: inset 0 1rem 0 rgba(255, 255, 255, 0.07), 0 14rem 38rem rgba(0, 0, 0, 0.48);
+  color: #fff;
+  position: fixed;
+  z-index: 10000;
+}
+
+.targetingPanel {
+  left: 50%;
+  min-width: 390rem;
+  padding: 15rem 17rem 13rem;
+  pointer-events: none;
+  top: 92rem;
+  transform: translateX(-50%);
+}
+
+.targetingPanel h2,
+.panel h2 {
+  color: #f8fbfd;
+  font-size: 20rem;
+  line-height: 1.15;
+  margin: 7rem 0 5rem;
+}
+
+.panel h2 {
+  font-size: 14rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.targetInstruction,
+.subtitle {
+  color: rgba(230, 239, 244, 0.76);
+  font-size: 12rem;
+  line-height: 1.42;
+  margin: 0;
+}
+
+.hoverPrompt {
+  background: rgba(20, 54, 70, 0.96);
+  border: 1rem solid #65c8ef;
+  border-radius: 6rem;
+  bottom: 112rem;
+  color: #f2fbff;
+  font-size: 14rem;
+  font-weight: 650;
+  left: 50%;
+  padding: 9rem 13rem;
+  pointer-events: none;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 10001;
+}
+
+.invalidPrompt {
+  background: rgba(113, 48, 37, 0.95);
+  border-color: #e7aa87;
+}
+
+.panel {
+  min-width: 340rem;
+  padding: 18rem;
+  right: 26rem;
+  top: 110rem;
+}
+
+.modeBadge {
+  align-items: center;
+  color: #79d6f6;
+  display: flex;
+  font-size: 11rem;
+  font-weight: 800;
+  gap: 6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.modePulse {
+  background: #68d4f7;
+  border: 2rem solid rgba(104, 212, 247, 0.22);
+  border-radius: 50%;
+  box-shadow: 0 0 8rem rgba(104, 212, 247, 0.72);
+  height: 7rem;
+  width: 7rem;
+}
+
+.editInstruction {
+  align-items: center;
+  background: rgba(96, 190, 227, 0.11);
+  border: 1rem solid rgba(115, 206, 240, 0.2);
+  border-radius: 6rem;
+  color: #deeff7;
+  display: flex;
+  font-size: 12rem;
+  gap: 9rem;
+  margin: 14rem 0 12rem;
+  padding: 9rem 10rem;
+}
+
+.assetPicker,
+.offsetPicker {
+  align-items: stretch;
+  display: flex;
+  gap: 8rem;
+}
+
+.assetPicker button,
+.offsetPicker button,
+.actions button {
+  border: 1rem solid rgba(255, 255, 255, 0.12);
+  border-radius: 6rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter 100ms ease, transform 100ms ease;
+}
+
+.assetPicker button:hover,
+.offsetPicker button:hover,
+.actions button:hover {
+  filter: brightness(1.18);
+  transform: translateY(-1rem);
+}
+
+.assetPicker button,
+.offsetPicker button {
+  background: rgba(123, 188, 215, 0.14);
+  color: #fff;
+  flex: 0 0 38rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.assetPicker button svg,
+.offsetPicker button svg {
+  fill: none;
+  height: 20rem;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  width: 20rem;
+}
+
+.disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.assetName {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1rem solid rgba(255, 255, 255, 0.08);
+  border-radius: 5rem;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 50rem;
+  padding: 6rem 10rem;
+  text-align: center;
+}
+
+.offsetLabel {
+  color: rgba(230, 239, 244, 0.82);
+  font-size: 11rem;
+  font-weight: 700;
+  margin: 12rem 0 6rem;
+}
+
+.offsetValue {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1rem solid rgba(255, 255, 255, 0.12);
+  border-radius: 5rem;
+  color: #fff;
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-height: 44rem;
+}
+
+.offsetValue input {
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font-family: inherit;
+  font-size: 15rem;
+  outline: none;
+  text-align: right;
+  width: 65rem;
+}
+
+.offsetValue span {
+  color: rgba(255, 255, 255, 0.67);
+  font-size: 12rem;
+  margin-left: 5rem;
+}
+
+.assetName strong {
+  font-size: 13rem;
+  max-width: 205rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assetName span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 11rem;
+  margin-top: 3rem;
+}
+
+.status {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12rem;
+  line-height: 1.35;
+  margin: 12rem 0 9rem;
+}
+
+.keyHint {
+  align-items: center;
+  color: rgba(224, 234, 239, 0.64);
+  display: flex;
+  font-size: 10rem;
+  gap: 6rem;
+  margin-top: 10rem;
+}
+
+.keyHint kbd {
+  background: rgba(255, 255, 255, 0.09);
+  border: 1rem solid rgba(255, 255, 255, 0.18);
+  border-radius: 4rem;
+  box-shadow: inset 0 -1rem 0 rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-family: inherit;
+  font-size: 9rem;
+  font-weight: 700;
+  padding: 2rem 5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 9rem;
+  margin-top: 13rem;
+}
+
+.actions button {
+  flex: 1 1 50%;
+  min-height: 36rem;
+}
+
+.cancel {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+}
+
+.place {
+  background: linear-gradient(145deg, #38a76d, #23774c);
+  color: #fff;
+  font-weight: 700;
+}

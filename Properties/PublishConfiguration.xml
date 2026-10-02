@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Publish>
+  <ModId Value="" />
+  <DisplayName Value="Brand the Building" />
+  <ShortDescription Value="Add company branding to building" />
+  <LongDescription>
+# Brand the Building
+### Your buildings. Their brands. Your finishing touch.
+
+Give your city’s businesses a little more personality with **Brand the Building**—a simple way to add company signs to buildings in Cities: Skylines II.
+
+Turn a plain office tower into a recognizable headquarters, give a storefront a more visible identity, or add a rooftop billboard to your skyline. Choose a building, position its company’s sign, and click **Place**. No complicated setup or layout editor required.
+
+## Pick a building. Position a sign. Place it.
+
+Brand the Building automatically finds the company occupying your chosen building and offers its compatible branding assets. You don’t need to search through a city-wide prop catalog or figure out which logo belongs to which business.
+
+The highlighted preview shows the sign you’re working with. Drag it across the building’s surface, cycle through the available designs, and place it when you’re happy.
+
+Want another sign on the other side? Activate the tool again and add one. **Add as many signs as you like, one placement at a time.**
+
+## What you can do
+
+- **Brand any building with a company and compatible signs.** Existing signage doesn’t get in your way—you can add more without replacing what’s already there.
+- **Choose from the company’s available designs.** Cycle through compatible billboards and other supported sign variants. Your selection depends on the brand and assets you have installed.
+- **Place signs on walls or rooftops.** Position a sign on the façade or give it a spot above the skyline.
+- **Drag directly on the building.** The preview follows the selected building’s surface instead of jumping onto neighboring buildings or the ground.
+- **Adjust the surface offset.** Move the sign closer to the building or farther out to suit its shape and architectural details.
+- **Rotate rooftop signs.** Hold the right mouse button and move your mouse left or right to adjust their direction.
+
+## How to use it
+
+### 1. Open the tool
+
+Click **Brand the Building** in the universal mod menu.
+
+You can also assign an activation hotkey in the mod’s settings. No hotkey is assigned by default.
+
+### 2. Choose your building
+
+Hover over a building. Eligible buildings highlight and display **“Add Company Branding Here.”**
+
+Click the surface where you want to start placing the sign. The mod automatically uses the building’s current company and brand.
+
+Buildings without a company—or without compatible branding assets—cannot be selected for placement.
+
+### 3. Make it yours
+
+Use the left and right arrows to browse the available signs, then click and drag the preview into position.
+
+For a closer fit, adjust **Surface offset**:
+
+- Click the arrows for small adjustments.
+- Hold **Shift** while clicking an arrow for a adjustment ten times larger.
+- Click the number to type a value, then press **Enter** or click outside the field to apply it.
+
+For rooftop placement, hold the **right mouse button** and drag left or right to rotate the sign. Wall signs automatically orient to the surface.
+
+### 4. Click Place
+
+Happy with the result? Click **Place** to finish. The tool closes after each placement.
+
+Changed your mind? Click **Cancel** or press **Escape** to discard the preview and exit. Nothing is committed until you click **Place**.
+
+## Simple by design
+
+Brand the Building focuses on one thing: **making it easy to add branding where you want it.**
+
+There are no automatic layouts to configure, no company picker to manage, and no background process adding signs without your say-so. Every sign starts with your choice of building and ends with your click on **Place**.
+
+Already-placed signs aren’t managed through a separate mod-specific editor. The mod also doesn’t automatically replace their branding when a building’s company changes.
+
+## Lightweight and built with save safety in mind
+
+Brand the Building uses the game’s native tool and entity systems, with placement work focused on the active editing session. It doesn’t continuously monitor or synchronize your placed signs, and the release version leaves out verbose diagnostic logging while retaining useful warnings and errors.
+
+Committed signs use game-supported entities **without custom serialized components from Brand the Building**. The mod doesn’t rewrite building prefabs or company branding data, and it doesn’t require a custom placement database.
+
+That means the mod is **designed to be removable without breaking saves or requiring it to remain installed to load your placed signs**.
+
+The sign assets themselves still matter: if a sign comes from an external asset pack, keep that pack installed. Removing the pack may cause its signs to disappear or become unavailable. As with any mod change, keeping a backup save is recommended.
+
+---
+
+**A little branding can make a building feel like it belongs in your city. Pick a surface, find the right sign, and make it yours.**
+  </LongDescription>
+  <Thumbnail Value="Properties/Thumbnail.png" />
+  <Tag Value="Code Mod" />
+  <ModVersion Value="0.1.14" />
+  <GameVersion Value="1.6.*" />
+  <ChangeLog>Alpha release.</ChangeLog>
+</Publish>
