@@ -6,18 +6,30 @@
     <ManagedPath Condition="'$(ManagedPath)' == ''">$(CSII_MANAGEDPATH)</ManagedPath>
     <ManagedPath Condition="'$(ManagedPath)' == ''">$([System.Environment]::GetEnvironmentVariable('CSII_MANAGEDPATH', 'EnvironmentVariableTarget.User'))</ManagedPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(UnityMathematicsSource)' != ''">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>$(NoWarn);CS8981</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
-    <Reference Include="Unity.Mathematics">
+    <Reference Include="Unity.Mathematics" Condition="'$(UnityMathematicsSource)' == ''">
       <HintPath>$(ManagedPath)/Unity.Mathematics.dll</HintPath>
     </Reference>
     <!-- Compile the same math used by the tool, without loading Game or ECS. -->
     <Compile Include="../Models/BrandPlacementMath.cs" Link="BrandPlacementMath.cs" />
   </ItemGroup>
+  <!-- CI uses Unity's source package without the two UnityEngine adapters. -->
+  <ItemGroup Condition="'$(UnityMathematicsSource)' != ''">
+    <Compile Include="$(UnityMathematicsSource)/**/*.cs"
+             Exclude="$(UnityMathematicsSource)/math_unity_conversion.cs;$(UnityMathematicsSource)/PropertyAttributes.cs"
+             Link="Unity.Mathematics/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
   <Target Name="CheckUnityMathematics" BeforeTargets="ResolveReferences">
-    <Error Condition="!Exists('$(ManagedPath)/Unity.Mathematics.dll')"
+    <Error Condition="'$(UnityMathematicsSource)' == '' And !Exists('$(ManagedPath)/Unity.Mathematics.dll')"
            Text="Set CSII_MANAGEDPATH or pass -p:ManagedPath to the game's Cities2_Data/Managed folder." />
+    <Error Condition="'$(UnityMathematicsSource)' != '' And !Exists('$(UnityMathematicsSource)/math.cs')"
+           Text="UnityMathematicsSource must point to the Unity.Mathematics folder in the extracted source package." />
   </Target>
 </Project>

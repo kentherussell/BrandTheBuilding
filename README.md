@@ -73,7 +73,7 @@ dotnet build .\BrandTheBuilding.csproj -c Release -p:EnableBrandTheBuildingUIBui
 
 ## Tests
 
-Tests run separately from the mod build. Run these commands from the repository root.
+Tests run separately from the mod build. GitHub Actions runs both test suites and the TypeScript check on every pull request. Run these commands locally from the repository root.
 
 ### UI
 
@@ -93,7 +93,7 @@ Install the **.NET 9 SDK**, then run:
 dotnet test .\Tests\BrandTheBuilding.Tests.csproj
 ```
 
-These tests use the same placement calculations as the mod and reference the game's `Unity.Mathematics.dll`. They check wall and roof orientation, rotation anchors, geometry bounds, and offsets.
+These tests use the same placement calculations as the mod and reference the game's `Unity.Mathematics.dll`. They check wall and roof orientation, rotation anchors, geometry bounds, and offsets. CI uses the official Unity Mathematics 1.3.2 source package so the GitHub runner does not need the game installed.
 
 If `CSII_MANAGEDPATH` is not configured, pass the path to your game's `Cities2_Data\Managed` folder:
 
