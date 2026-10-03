@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Tests\**\*.cs" />
     <None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
     <None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
     <UpToDateCheckInput Include="UI\src\**\*.ts;UI\src\**\*.tsx;UI\src\**\*.scss" Exclude="UI\node_modules\**" />

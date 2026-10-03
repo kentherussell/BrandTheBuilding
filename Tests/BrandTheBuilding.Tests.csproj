@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <ManagedPath Condition="'$(ManagedPath)' == ''">$(CSII_MANAGEDPATH)</ManagedPath>
+    <ManagedPath Condition="'$(ManagedPath)' == ''">$([System.Environment]::GetEnvironmentVariable('CSII_MANAGEDPATH', 'EnvironmentVariableTarget.User'))</ManagedPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
+    <Reference Include="Unity.Mathematics">
+      <HintPath>$(ManagedPath)/Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <!-- Compile the same math used by the tool, without loading Game or ECS. -->
+    <Compile Include="../Models/BrandPlacementMath.cs" Link="BrandPlacementMath.cs" />
+  </ItemGroup>
+  <Target Name="CheckUnityMathematics" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(ManagedPath)/Unity.Mathematics.dll')"
+           Text="Set CSII_MANAGEDPATH or pass -p:ManagedPath to the game's Cities2_Data/Managed folder." />
+  </Target>
+</Project>
