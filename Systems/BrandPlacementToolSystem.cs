@@ -32,11 +32,7 @@ namespace BrandTheBuilding.Systems
     {
         private const float BillboardFaceClearance = 0.04f;
         private const float FlatFaceClearance = 0.03f;
-        private const float MinimumOffset = -10f;
-        private const float MaximumOffset = 3f;
-        private const float DefaultOffset = -0.10f;
         private const float OffsetStep = 0.05f;
-        private const float MaximumHorizontalNormalY = 0.55f;
         private const float SupportProbeReach = 0.35f;
         private const int SupportProbeCount = 5;
         private const int SupportTimeoutFrames = 4;
@@ -227,7 +223,7 @@ namespace BrandTheBuilding.Systems
                 return;
             }
 
-            float next = math.round(math.clamp(value, MinimumOffset, MaximumOffset) * 100f) / 100f;
+            float next = BrandPlacementMath.ClampOffset(value);
             if (next != m_Offset)
             {
                 m_Offset = next;
@@ -538,7 +534,7 @@ namespace BrandTheBuilding.Systems
             // Start thick billboards 10 cm closer. Thin signs must retain a
             // visible face; rounding toward zero avoids burying sub-cm geometry.
             float depth = CurrentCandidate.BoundsMax.z - CurrentCandidate.BoundsMin.z;
-            m_Offset = math.max(DefaultOffset, -math.floor(depth * 100f) / 100f);
+            m_Offset = BrandPlacementMath.InitialOffset(depth);
             m_Mode = BrandToolMode.Editing;
             m_IsDragging = false;
             m_HoverText = string.Empty;
@@ -777,12 +773,9 @@ namespace BrandTheBuilding.Systems
             // Bounds do not identify which depth contains the visible artwork.
             // Keep the nearest authored geometry outside the wall at zero offset,
             // including thin neon/circular signs with an off-center pivot.
-            float3 center = (candidate.BoundsMin + candidate.BoundsMax) * 0.5f;
             float clearance = FaceClearance(candidate) + m_SurfaceLift + m_Offset;
-            float3 localOffset = IsRoof(normal)
-                ? new float3(-center.x, clearance - candidate.BoundsMin.y, -center.z)
-                : new float3(-center.x, -center.y, clearance - candidate.BoundsMin.z);
-            float3 position = anchor + math.rotate(rotation, localOffset);
+            float3 position = BrandPlacementMath.Position(anchor, normal, rotation,
+                candidate.BoundsMin, candidate.BoundsMax, clearance);
             m_FinalTransform = new Game.Objects.Transform(position, rotation);
 
             if (m_PreviewEntity != Entity.Null && EntityManager.Exists(m_PreviewEntity))
@@ -817,26 +810,13 @@ namespace BrandTheBuilding.Systems
             }
 
             // Accept walls and upward-facing roofs, but not undersides/ceilings.
-            return normal.y >= -MaximumHorizontalNormalY;
+            return normal.y >= -BrandPlacementMath.MaximumHorizontalNormalY;
         }
 
-        private static bool IsRoof(float3 normal) => normal.y > MaximumHorizontalNormalY;
+        private static bool IsRoof(float3 normal) => BrandPlacementMath.IsRoof(normal);
 
-        private quaternion PlacementRotation(float3 normal, float? roofYaw = null)
-        {
-            if (IsRoof(normal))
-            {
-                // Stand on the roof, using the building's heading rather than
-                // camera direction. Project it onto sloped roofs deterministically.
-                float3 forward = math.rotate(m_SelectedBuildingTransform.m_Rotation, new float3(0f, 0f, 1f));
-                forward = math.normalizesafe(forward - normal * math.dot(forward, normal));
-                return math.mul(quaternion.AxisAngle(normal, roofYaw ?? m_RoofYaw),
-                    quaternion.LookRotationSafe(forward, normal));
-            }
-            float3 up = math.normalizesafe(new float3(0f, 1f, 0f) - normal * normal.y,
-                new float3(0f, 1f, 0f));
-            return quaternion.LookRotationSafe(normal, up);
-        }
+        private quaternion PlacementRotation(float3 normal, float? roofYaw = null) =>
+            BrandPlacementMath.Rotation(normal, m_SelectedBuildingTransform.m_Rotation, roofYaw ?? m_RoofYaw);
 
         private void QueueSurfaceValidation(
             float3 anchor,
@@ -1123,9 +1103,7 @@ namespace BrandTheBuilding.Systems
                         .Replace(" ", string.Empty)
                         .ToLowerInvariant();
 
-                    // The MVP picker is deliberately limited to billboard signs.
-                    // Neon and circular billboard variants have thin geometry;
-                    // posters and decals are not eligible.
+                    // Include billboard, neon, and circular signs; exclude posters and decals.
                     bool isBillboard = normalizedName.Contains("billboard");
                     bool isNeon = normalizedName.Contains("neon");
                     bool isCircle = normalizedName.Contains("circle");
@@ -1361,7 +1339,7 @@ namespace BrandTheBuilding.Systems
             m_PlaceRequested = false;
             m_CancelRequested = false;
             m_AssetStepRequested = 0;
-            m_Offset = DefaultOffset;
+            m_Offset = BrandPlacementMath.DefaultOffset;
             m_OffsetChanged = false;
             m_HasAnchor = false;
             m_SurfaceAnchor = float3.zero;

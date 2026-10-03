@@ -1,70 +1,108 @@
 # Brand the Building
 
-`BrandTheBuilding` is a clean Cities: Skylines II code-mod project for manually placing a company's compatible branding asset on the real surface of its building.
+A Cities: Skylines II mod for placing company signs on building walls and roofs. Choose a building, pick one of its company's compatible branding assets, and position it on the surface.
 
-## Implemented MVP flow (for alpha release)
+[Get the mod on Paradox Mods](https://mods.paradoxplaza.com/mods/161581/Windows)
 
-1. The **Brand the Building** button is added to the game's Universal Mod Menu.
-2. Activating it enters targeting mode.
-3. A building with exactly one company renter highlights and shows a separate hover prompt: `Add Company Branding Here`.
-4. A building without a company shows the corresponding invalid message.
-5. Clicking a valid façade resolves `CompanyData.m_Brand`, gathers matching `BrandObjectData` prefabs, and enters editing.
-6. The default candidate prioritizes a prefab whose name contains `Billboard Large`, then other billboard, neon, and circular sign variants. Posters and decals are excluded.
-7. The temporary preview uses the raycast's real mesh hit position and triangle normal.
-8. Click-dragging only accepts raycast hits that resolve back to the originally selected building. Losing the surface keeps the last valid position.
-9. Walls and upward-facing roofs are supported; undersides are rejected. Roof signs stand on their base, aligned with the building heading and roof slope. Orientation is automatic.
-10. Previous/next cycles compatible assets while retaining the current surface anchor. The picker uses drawn arrows rather than font glyphs.
-11. Editing highlights the sign preview, while the targeting highlight is removed from the building.
-12. Surface offset ranges from -10.00 m to 3.00 m. Arrows step 0.05 m, or 0.50 m with Shift held. Typed values apply only on Enter/focus loss. Thick billboards start at -0.10 m; thin signs use a less negative initial value if needed to keep their face visible. Asset switching retains the chosen offset.
-13. The Universal Mod Menu entry is a square blue button with a white billboard icon and a hover label rendered outside the menu's clipping container. Options → Mods exposes an enabled, optional tool-activation hotkey with no key assigned by default.
-14. Cancel or Escape marks the preview for the game's normal deletion pass and exits without committing.
-15. Place captures the live preview transform (not the last cached calculation), removes the preview's custom marker/highlight and instance alignment instructions, supplies elevation derived from the snapshot, and requests `ApplyMode.Apply`. It waits for the game to remove `Temp`, restores that same snapshot/elevation once and exits. A four-update timeout restores editing. There is no second creation request or replacement prop.
-16. The smaller editing heading uses the building address from `BuildingUtils.GetAddress`, including the road's localized/custom name. A building without an address falls back to its label.
+## Installation
 
-## Save and uninstall design
+Install the mod through Paradox Mods and enable it in your active playset.
 
-- The preview retains the branding prefab's rendering components, then removes the live-object `Created` marker and any `Owner` before the game updates it. It has `Temp` and the mod's `BrandPreview` marker. On exit or asset switch it receives `TempFlags.Cancel` and `Deleted`, allowing rendering and cleanup systems to observe removal.
-- Place uses the native tool-apply lifecycle on the preview. `BrandPreview` is removed before applying, and the game removes `Temp`. Completed props are excluded from preview cleanup.
-- No serialized `AppliedCompanyLogo`-style marker exists in this project.
-- No building prefab, authored subobject list, company data, brand data, or asset configuration is modified.
-- There is no background synchronization or persistent placement database.
-- A native Owner and reciprocal live-instance SubObject reference are added only when Place is requested. No Attached alignment component is added, no shared prefab is modified, and no custom persistent component or background visibility repair is used. Exact placement, override immunity, save/reload, mod removal, building lifecycle and normal prop selection/deletion must be verified against the installed Windows game build.
-- Removing the asset pack that supplied the selected branding prefab remains an expected external dependency risk.
+The company must have a compatible branding asset available in the game. Keep any asset packs used by placed signs installed.
 
-## Windows prerequisites
+## How to use
 
-1. Install Cities: Skylines II.
-2. In the game, install/update the official modding toolchain from **Options → Mods**.
-3. Install Visual Studio with the workload required by the CS2 toolchain.
-4. Confirm the user environment variable `CSII_TOOLPATH` points to the toolchain folder containing `Mod.props` and `Mod.targets`.
-5. Confirm Node.js is available. The toolchain currently expects Node 18 or later.
+1. Open **Brand the Building** from the Universal Mod Menu.
+2. Hover over a company building and click a wall or an upward-facing roof.
+3. Use the asset arrows to choose a sign.
+4. Click and drag on the selected building to move the preview. For roof signs, hold the right mouse button and drag left or right to rotate.
+5. Adjust **Surface offset** to move the sign toward or away from the surface.
+6. Click **Place** to confirm, or **Cancel** to discard the preview.
 
-## Build
+You can assign an activation shortcut under **Options → Mods → Brand the Building**. No key is assigned by default.
 
-Open `BrandTheBuilding.csproj` in Visual Studio and build `Release`, or run from a Developer PowerShell:
+### Controls
+
+| Action | Control |
+| --- | --- |
+| Move the sign | Left-click and drag on the selected building |
+| Rotate a roof sign | Hold right-click and drag horizontally |
+| Change the sign | Previous / next asset arrows |
+| Adjust surface offset | Offset arrows, in 0.05 m steps |
+| Adjust offset in larger steps | Hold Shift while clicking an offset arrow, in 0.50 m steps |
+| Enter an exact offset | Type a value, then press Enter or leave the field |
+| Cancel and exit | Cancel or Esc |
+
+Surface offset accepts values from **−10.00 m to 3.00 m**. Negative values inset the sign; positive values move it outward.
+
+### Placement requirements
+
+- The building must have exactly one company tenant with a brand and a compatible sign asset.
+- Billboard, neon, and circular sign assets are supported. Posters and decals are filtered out.
+- The sign needs support behind its center and corners. **Place** stays disabled while the surface is being checked or when it cannot support the sign.
+- Dragging off the selected building keeps the last valid position. Move back onto the building to continue adjusting it.
+
+## Building from source
+
+Build on Windows with:
+
+- Cities: Skylines II installed.
+- The official modding toolchain installed through the game.
+- Visual Studio with the components required by the toolchain.
+- Node.js 18 or later, with npm available on your PATH.
+
+The toolchain should configure `CSII_TOOLPATH` to point to the folder containing `Mod.props` and `Mod.targets`. Restart your terminal or Visual Studio after installing the toolchain so it picks up the environment variables.
+
+From the repository root, run:
 
 ```powershell
 dotnet build .\BrandTheBuilding.csproj -c Release
 ```
 
-The project builds its UI automatically with `npm install` and `npm run build`. The UI bundle is written to:
+You can also open `BrandTheBuilding.csproj` in Visual Studio and build **Release**. The build restores the UI dependencies, builds the UI, and deploys the mod to the local game Mods directory. The standard location is:
 
 ```text
 %USERPROFILE%\AppData\LocalLow\Colossal Order\Cities Skylines II\Mods\BrandTheBuilding
 ```
 
-If your toolchain does not define `CSII_USERDATAPATH`, the UI build uses that standard Windows path automatically.
-
-To compile only the C# project while diagnosing UI tooling, pass:
+To skip the UI build when troubleshooting the C# project:
 
 ```powershell
 dotnet build .\BrandTheBuilding.csproj -c Release -p:EnableBrandTheBuildingUIBuild=false
 ```
 
-## Deliberately excluded
+## Tests
 
-There is no automatic placement, company picker, scaling, manual rotation, numeric XYZ transforms, snapping UI, keyboard nudging, editing of committed props, custom deletion manager, undo/redo, dynamic company-change handling, persistent placement metadata, existing-brand detection, or curved-mesh deformation. The surface-normal offset is the one deliberately added placement control.
+Tests run separately from the mod build. Run these commands from the repository root.
 
-## Important implementation note
+### UI
 
-The preview anchor is a selected-building raycast hit. Five short mesh raycasts check the center and corners before accepting a new anchor or asset; unsupported positions retain the last valid preview. Only one batch is pending at a time, with a four-tool-update timeout. The closest geometry bound starts outside the wall, with clearance for protrusions detected by those probes. Negative user offsets can intentionally inset it. Bounds cannot identify artwork separately from backing/supports, so thick signs can stand farther out than thin signs. No mesh bending or asset-specific guessed face depth is used.
+```powershell
+npm --prefix UI ci
+npm --prefix UI test
+npm --prefix UI run typecheck
+```
+
+The UI tests use real React rendering with simulated game bindings. They check offset editing, asset navigation, placement controls, focus, and mouse interactions.
+
+### Placement math
+
+Install the **.NET 9 SDK**, then run:
+
+```powershell
+dotnet test .\Tests\BrandTheBuilding.Tests.csproj
+```
+
+These tests use the same placement calculations as the mod and reference the game's `Unity.Mathematics.dll`. They check wall and roof orientation, rotation anchors, geometry bounds, and offsets.
+
+If `CSII_MANAGEDPATH` is not configured, pass the path to your game's `Cities2_Data\Managed` folder:
+
+```powershell
+dotnet test .\Tests\BrandTheBuilding.Tests.csproj -p:ManagedPath="C:\Program Files (x86)\Steam\steamapps\common\Cities Skylines II\Cities2_Data\Managed"
+```
+
+The tests do not launch the game. Changes to surface detection, placement, preview cleanup, or save behavior also need to be checked in-game.
+
+## License
+
+[MIT](LICENSE)
